@@ -60,12 +60,15 @@ class Cart:
         else:
             item.delete()
 
-    def update(self, product, quantity, unit_price=None):
+    def update(self, product, quantity=1, unit_price=None):
         try:
             item = models.Item.objects.get(
                 cart=self.cart,
                 product=product,
             )
+            item.unit_price = unit_price
+            item.quantity = item.quantity + quantity
+            item.save()
         except models.Item.DoesNotExist:
             raise ItemDoesNotExist
             
