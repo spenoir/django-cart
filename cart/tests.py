@@ -108,3 +108,12 @@ class CartAndItemModelsTestCase(TestCase):
         item = self._create_item_in_database(cart, product=user, quantity=3, unit_price=Decimal("100"))
 
         self.assertEquals(item.__unicode__(), "3 units of User")
+
+    def test_cart_totals(self):
+        user = self._create_user_in_database()
+        cart = self._create_cart_in_database()
+
+        item = self._create_item_in_database(cart, product=user, quantity=3, unit_price=Decimal("100"))
+
+        self.assertEqual(cart.totals([item]).get('total'), 300)
+        self.assertEqual(cart.totals([item]).get('total_items'), 3)

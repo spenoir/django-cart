@@ -3,9 +3,24 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+
 class Cart(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('creation date'))
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
+
+    def totals(self, items):
+        " get totals for the current cart "
+        basket_total = 0
+        total_items = 0
+
+        for item in items:
+            basket_total += item.total_price
+            total_items += item.quantity
+
+        return {
+            'total': basket_total,
+            'total_items': total_items
+        }
 
     class Meta:
         verbose_name = _('cart')
